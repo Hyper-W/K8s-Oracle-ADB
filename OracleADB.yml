@@ -13,28 +13,28 @@ spec:
       labels:
         app: oracle-adb
     spec:
-      # securityContext:
-      #   fsGroup: 54321
+      securityContext:
+        fsGroup: 54321
       containers:
         - name: oracle-adb
           image: container-registry.oracle.com/database/adb-free:23.8.5.2
           imagePullPolicy: IfNotPresent
-  #         volumeMounts:
-  #           - mountPath: "/u01/app/oracle/oradata"
-  #             name: oracle-adb
-  #     volumes:
-  #       - name: oracle-adb
-  #         persistentVolumeClaim:
-  #           claimName: oracle-adb
-  # volumeClaimTemplates:
-  #   - metadata:
-  #       name: oracle-adb
-  #     spec:
-  #       accessModes:
-  #         - ReadWriteMany
-  #       resources:
-  #         requests:
-  #           storage: 20Gi
+          volumeMounts:
+            - mountPath: "/u01/app/oracle/oradata"
+              name: oracle-adb
+      volumes:
+        - name: oracle-adb
+          persistentVolumeClaim:
+            claimName: oracle-adb
+  volumeClaimTemplates:
+    - metadata:
+        name: oracle-adb
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 20Gi
 ---
 apiVersion: v1
 kind: Service
