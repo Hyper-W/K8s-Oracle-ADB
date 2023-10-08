@@ -19,7 +19,7 @@ spec:
           command: ["sh"]
           args:
             - -c
-            - chown 54321:54321 /u01/app/oracle/oradata
+            - chown 54321:54321 /u01/app/oracle/oradata && chmod 750 /u01/app/oracle/oradata
           volumeMounts:
             - mountPath: "/u01/app/oracle/oradata"
               name: oracle-adb
