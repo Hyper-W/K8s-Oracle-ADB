@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: oracle-adb-init
+  namespace: oracle
+spec:
+  template:
+    spec:
+      containers:
+        - name: chown-volume
+          image: busybox
+          command: ["sh"]
+          args:
+            - -c
+            - chown 54321:54321 -R /u01/app/oracle/oradata && chmod 750 /u01/app/oracle/oradata
+          volumeMounts:
+            - mountPath: "/u01/app/oracle/oradata"
+              name: oracle-adb
+        - name: copy-volumes
+          image: container-registry.oracle.com/database/adb-free:23.8.5.2
+          command: ["bash"]
+          args:
+            - -c
+            - cp -aT /u01/app/oracle/oradata /u01/app/oracle/oradata-cp
+          volumeMounts:
+            - mountPath: "/u01/app/oracle/oradata-cp"
+              name: oracle-adb
+      restartPolicy: Never
+      volumes:
+        - name: oracle-adb
+          persistentVolumeClaim:
+            claimName: oracle-adb

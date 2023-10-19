@@ -13,18 +13,6 @@ spec:
       labels:
         app: oracle-adb
     spec:
-      initContainers:
-        - name: oracle-adb-init
-          image: busybox
-          command: ["sh"]
-          args:
-            - -c
-            - chown 54321:54321 /u01/app/oracle/oradata && chmod 750 /u01/app/oracle/oradata
-          volumeMounts:
-            - mountPath: "/u01/app/oracle/oradata"
-              name: oracle-adb
-      # securityContext:
-      #   fsGroup: 54321
       containers:
         - name: oracle-adb
           image: container-registry.oracle.com/database/adb-free:23.8.5.2
@@ -36,15 +24,6 @@ spec:
         - name: oracle-adb
           persistentVolumeClaim:
             claimName: oracle-adb
-  volumeClaimTemplates:
-    - metadata:
-        name: oracle-adb
-      spec:
-        accessModes:
-          - ReadWriteMany
-        resources:
-          requests:
-            storage: 20Gi
 ---
 apiVersion: v1
 kind: Service
